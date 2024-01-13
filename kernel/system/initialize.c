@@ -1,5 +1,6 @@
 #include <barelib.h>
 #include <interrupts.h>
+#include <bareio.h>
 
 /*
  *  This file contains the C code entry point executed by the kernel.
@@ -24,5 +25,6 @@ void initialize(void) {
   restore_interrupts(mask);
   boot_complete = 1;
   
+  printf("hello!\n");
   
 }

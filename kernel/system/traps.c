@@ -1,5 +1,4 @@
 #include <barelib.h>
-#include <syscall.h>
 
 int32 resched(void);
 
