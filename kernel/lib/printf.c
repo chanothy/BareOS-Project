@@ -32,6 +32,38 @@ void int_print(int num) {
   }
 }
 
+void hex_print(int num) {
+  if (num == 0) {
+    uart_putc('0');
+    uart_putc('x');
+    uart_putc('0');
+    return;
+  }
+
+  char buffer[buff];
+  int index = 0;
+
+  while (num > 0) {
+    int remainder = num % 16;
+    if (remainder < 10) {
+      // 0 ascii is 0
+      buffer[index] = ('0' + remainder);
+      index++;
+    }
+    else {
+      // a acii is 97
+      buffer[index] = 'a' + remainder - 10;
+      index++;
+    }
+    index++;
+    num /= 16;
+  }
+
+  for (int i = index - 1; i >= 0; i--) {
+    uart_putc(buffer[i]);
+  }
+}
+
 void printf(const char* format, ...) {
   va_list ap;
   va_start(ap, format);
@@ -48,7 +80,9 @@ void printf(const char* format, ...) {
         int_print((int)va_arg(ap,int));
       }
       else if (*letter == 'x') {
-        
+        uart_putc('0');
+        uart_putc('x');
+        hex_print((int)va_arg(ap,int));
       }
     }
     else {

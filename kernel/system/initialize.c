@@ -25,6 +25,6 @@ void initialize(void) {
   restore_interrupts(mask);
   boot_complete = 1;
   
-  printf("hello! %d\n",49);
-  
+  // printf("hello! %d\n",49);
+  printf("Hexadecimal! %x\n",22);
 }
