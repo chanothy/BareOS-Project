@@ -1,6 +1,6 @@
 #include <bareio.h>
 #include <barelib.h>
-#define buff 20
+#define buff 1024
 
 /*
  *  In this file, we will write a 'printf' function used for the rest of
@@ -15,6 +15,10 @@ void int_print(int num) {
   if (num == 0) {
     uart_putc('0');
     return;
+  }
+
+  if (num < 0) {
+    num = num * -1;
   }
 
   char buffer[buff]; 
@@ -35,16 +39,19 @@ void int_print(int num) {
 void hex_print(int num) {
   if (num == 0) {
     uart_putc('0');
-    uart_putc('x');
-    uart_putc('0');
     return;
   }
+
 
   char buffer[buff];
   int index = 0;
 
+  if (num < 0) {
+    num = num * -1;
+  }
+
   while (num > 0) {
-    int remainder = num % 16;
+    int remainder =num % 16;
     if (remainder < 10) {
       // 0 ascii is 0
       buffer[index] = ('0' + remainder);
@@ -52,7 +59,7 @@ void hex_print(int num) {
     }
     else {
       // a acii is 97
-      buffer[index] = 'a' + remainder - 10;
+      buffer[index] = 'a'+ remainder - 10;
       index++;
     }
     index++;
@@ -62,6 +69,7 @@ void hex_print(int num) {
   for (int i = index - 1; i >= 0; i--) {
     uart_putc(buffer[i]);
   }
+  
 }
 
 void printf(const char* format, ...) {
@@ -75,8 +83,6 @@ void printf(const char* format, ...) {
       counter++;
       letter = (char*) (format+counter);
       if (*letter == 'd') {
-        // char buff[4]; // use a buffer to manage the ints
-        // uart_putc(((int) va_arg(ap,int)));
         int_print((int)va_arg(ap,int));
       }
       else if (*letter == 'x') {
@@ -91,30 +97,6 @@ void printf(const char* format, ...) {
     counter++;
     letter = (char*) (format+counter);
   }
-
-  // method that updates format 
-  /*
-  char* letter = (char*) format;
-  while (*letter != '\0') {
-    if (*letter == '%') {
-      format = format + 1;
-      letter = (char*) (format);
-      if (*letter == 'd') {
-        uart_putc('s');
-      }
-      else if (*letter == 'x') {
-        
-      }
-    }
-    else {
-      uart_putc(*letter);
-      
-    }
-    format = format + 1;
-    letter = (char*) (format);
-  }
-  */
-
   
   va_end(ap);
 }
