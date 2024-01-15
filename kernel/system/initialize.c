@@ -19,12 +19,20 @@ void ctxload(uint64**);
 uint32 boot_complete = 0;
 
 void initialize(void) {
+  
   char mask;
   mask = disable_interrupts();
   uart_init();
   restore_interrupts(mask);
   boot_complete = 1;
+
+  // printf("Kernel start: %x\n",text_start);
+  // printf("--Kernel size: %d\n",text_start-data_start);
+  // printf("Globals start: %x\n",data_start);
+  // printf("Heap/Stack start: %x\n",mem_start);
+  // printf("--Free memory available: %d",mem_start-mem_end);
+  // printf("\n");
+  // printf("hex: %x feet\n", 121212);
+
   
-  // printf("hello! %d\n",49);
-  printf("Hexadecimal! %x\n",22);
 }

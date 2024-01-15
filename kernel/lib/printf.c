@@ -1,6 +1,6 @@
 #include <bareio.h>
 #include <barelib.h>
-#define buff 20
+#define buff 1024
 
 /*
  *  In this file, we will write a 'printf' function used for the rest of
@@ -35,8 +35,6 @@ void int_print(int num) {
 void hex_print(int num) {
   if (num == 0) {
     uart_putc('0');
-    uart_putc('x');
-    uart_putc('0');
     return;
   }
 
@@ -44,7 +42,7 @@ void hex_print(int num) {
   int index = 0;
 
   while (num > 0) {
-    int remainder = num % 16;
+    int remainder =num % 16;
     if (remainder < 10) {
       // 0 ascii is 0
       buffer[index] = ('0' + remainder);
@@ -52,7 +50,7 @@ void hex_print(int num) {
     }
     else {
       // a acii is 97
-      buffer[index] = 'a' + remainder - 10;
+      buffer[index] = 'a'+ remainder - 10;
       index++;
     }
     index++;
