@@ -10,70 +10,70 @@ _sysmem          0x0000000080000000 0x0000000008000000 axw!rl
 Linker script and memory map
 
 
-.text           0x0000000080000000     0x1aa8
+.text           0x0000000080000000     0x1a84
                 0x0000000080000000                PROVIDE (_mmap_text_start = ABSOLUTE (.))
  *(.text.entry)
  .text.entry    0x0000000080000000      0x16c .build/bootstrap_asm.o
                 0x0000000080000074                __noop
  *(.text .text.*)
- .text          0x000000008000016c       0xdc .build/initialize.o
+ .text          0x000000008000016c       0xe2 .build/initialize.o
                 0x000000008000016c                initialize
- .text          0x0000000080000248       0xde .build/traps.o
-                0x0000000080000248                __sys_capture_syscall
-                0x0000000080000256                raise_syscall
-                0x00000000800002a2                handle_exception
- .text          0x0000000080000326       0x10 .build/resched.o
-                0x0000000080000326                resched
- .text          0x0000000080000336        0x0 .build/mmap.o
- .text          0x0000000080000336      0x2b0 .build/uart.o
-                0x0000000080000336                __sys_putc
-                0x000000008000037c                __sys_getc
-                0x00000000800003de                uart_putc
-                0x000000008000040a                uart_getc
-                0x000000008000042a                set_uart_interrupt
-                0x000000008000049c                uart_handler
-                0x00000000800004ee                uart_init
- .text          0x00000000800005e6       0xa0 .build/plic.o
-                0x00000000800005e6                plic_init
-                0x0000000080000612                handle_plic
- .text          0x0000000080000686       0xca .build/timer.o
-                0x0000000080000686                clk_init
-                0x00000000800006b2                handle_clk
- .text          0x0000000080000750      0x698 .build/msutil.o
-                0x0000000080000750                _prep_stdin
-                0x00000000800007b2                syscall_tester
-                0x0000000080000800                getc_tester
-                0x000000008000086c                putc_tester
-                0x0000000080000920                _psudoprint
-                0x0000000080000962                __clear_string
-                0x00000000800009f4                __test_template
-                0x0000000080000b0e                __test_string
-                0x0000000080000bb6                _copy_string
-                0x0000000080000bfa                _copy_hex
-                0x0000000080000cf6                _copy_dec
- .text          0x0000000080000de8      0x720 .build/ms1.o
-                0x0000000080000de8                __ms1
- .text          0x0000000080001508       0x9a .build/barelib.o
-                0x0000000080001508                memset
-                0x0000000080001554                memcpy
- .text          0x00000000800015a2      0x2f8 .build/printf.o
-                0x00000000800015a2                int_print
-                0x0000000080001670                hex_print
-                0x0000000080001794                printf
- .text          0x000000008000189a       0x20 .build/interrupts_asm.o
-                0x000000008000189a                set_interrupt
-                0x00000000800018a0                disable_interrupts
-                0x00000000800018a6                enable_interrupts
-                0x00000000800018ac                restore_interrupts
-                0x00000000800018b2                is_interrupting
- .text          0x00000000800018ba      0x1ec .build/msutil_asm.o
-                0x00000000800019ba                _ms_recovery_status
-                0x00000000800019be                _ms_recover
-                0x00000000800019c8                _ms_safe_call
- .text          0x0000000080001aa6        0x0 .build/bootstrap_asm.o
-                0x0000000080001aa8                . = ALIGN (0x4)
- *fill*         0x0000000080001aa6        0x2 
-                0x0000000080001aa8                PROVIDE (_mmap_text_end = ABSOLUTE (.))
+ .text          0x000000008000024e       0xde .build/traps.o
+                0x000000008000024e                __sys_capture_syscall
+                0x000000008000025c                raise_syscall
+                0x00000000800002a8                handle_exception
+ .text          0x000000008000032c       0x10 .build/resched.o
+                0x000000008000032c                resched
+ .text          0x000000008000033c        0x0 .build/mmap.o
+ .text          0x000000008000033c      0x2b0 .build/uart.o
+                0x000000008000033c                __sys_putc
+                0x0000000080000382                __sys_getc
+                0x00000000800003e4                uart_putc
+                0x0000000080000410                uart_getc
+                0x0000000080000430                set_uart_interrupt
+                0x00000000800004a2                uart_handler
+                0x00000000800004f4                uart_init
+ .text          0x00000000800005ec       0xa0 .build/plic.o
+                0x00000000800005ec                plic_init
+                0x0000000080000618                handle_plic
+ .text          0x000000008000068c       0xca .build/timer.o
+                0x000000008000068c                clk_init
+                0x00000000800006b8                handle_clk
+ .text          0x0000000080000756      0x698 .build/msutil.o
+                0x0000000080000756                _prep_stdin
+                0x00000000800007b8                syscall_tester
+                0x0000000080000806                getc_tester
+                0x0000000080000872                putc_tester
+                0x0000000080000926                _psudoprint
+                0x0000000080000968                __clear_string
+                0x00000000800009fa                __test_template
+                0x0000000080000b14                __test_string
+                0x0000000080000bbc                _copy_string
+                0x0000000080000c00                _copy_hex
+                0x0000000080000cfc                _copy_dec
+ .text          0x0000000080000dee      0x720 .build/ms1.o
+                0x0000000080000dee                __ms1
+ .text          0x000000008000150e       0x9a .build/barelib.o
+                0x000000008000150e                memset
+                0x000000008000155a                memcpy
+ .text          0x00000000800015a8      0x2ce .build/printf.o
+                0x00000000800015a8                int_print
+                0x0000000080001676                hex_print
+                0x0000000080001770                printf
+ .text          0x0000000080001876       0x20 .build/interrupts_asm.o
+                0x0000000080001876                set_interrupt
+                0x000000008000187c                disable_interrupts
+                0x0000000080001882                enable_interrupts
+                0x0000000080001888                restore_interrupts
+                0x000000008000188e                is_interrupting
+ .text          0x0000000080001896      0x1ec .build/msutil_asm.o
+                0x0000000080001996                _ms_recovery_status
+                0x000000008000199a                _ms_recover
+                0x00000000800019a4                _ms_safe_call
+ .text          0x0000000080001a82        0x0 .build/bootstrap_asm.o
+                0x0000000080001a84                . = ALIGN (0x4)
+ *fill*         0x0000000080001a82        0x2 
+                0x0000000080001a84                PROVIDE (_mmap_text_end = ABSOLUTE (.))
 
 .rodata         0x0000000080002000      0x7eb
                 0x0000000080002000                PROVIDE (_mmap_data_start = ABSOLUTE (.))
@@ -271,7 +271,7 @@ OUTPUT(.build/kernel.elf elf64-littleriscv)
  .debug_aranges
                 0x0000000000000260       0x30 .build/bootstrap_asm.o
 
-.debug_line     0x0000000000000000     0x19ab
+.debug_line     0x0000000000000000     0x198d
  .debug_line    0x0000000000000000       0xc3 .build/initialize.o
  .debug_line    0x00000000000000c3       0xdd .build/traps.o
  .debug_line    0x00000000000001a0       0x67 .build/resched.o
@@ -282,10 +282,10 @@ OUTPUT(.build/kernel.elf elf64-littleriscv)
  .debug_line    0x0000000000000694      0x675 .build/msutil.o
  .debug_line    0x0000000000000d09      0x580 .build/ms1.o
  .debug_line    0x0000000000001289      0x10a .build/barelib.o
- .debug_line    0x0000000000001393      0x294 .build/printf.o
- .debug_line    0x0000000000001627       0x88 .build/interrupts_asm.o
- .debug_line    0x00000000000016af      0x1b6 .build/msutil_asm.o
- .debug_line    0x0000000000001865      0x146 .build/bootstrap_asm.o
+ .debug_line    0x0000000000001393      0x276 .build/printf.o
+ .debug_line    0x0000000000001609       0x88 .build/interrupts_asm.o
+ .debug_line    0x0000000000001691      0x1b6 .build/msutil_asm.o
+ .debug_line    0x0000000000001847      0x146 .build/bootstrap_asm.o
 
 .debug_str      0x0000000000000000      0x5c5
  .debug_str     0x0000000000000000      0x5c5 .build/initialize.o
