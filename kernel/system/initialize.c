@@ -26,17 +26,13 @@ void initialize(void) {
   restore_interrupts(mask);
   boot_complete = 1;
 
-  // uint32* test = (uint32)0x23
-  printf("Kernel start: %x\n",text_start);
-  printf("--Kernel size: %d\n",(text_start-data_start));
-  printf("Globals start: %x\n",data_start);
-  printf("Heap/Stack start: %x\n",mem_start);
-  printf("--Free memory available: %d\n",(mem_start-mem_end));
+  // printf("Kernel start: %x\n",text_start);
+  // printf("--Kernel size: %d\n",text_start-data_start);
+  // printf("Globals start: %x\n",data_start);
+  // printf("Heap/Stack start: %x\n",mem_start);
+  // printf("--Free memory available: %d",mem_start-mem_end);
+  // printf("\n");
+  // printf("hex: %x feet\n", 121212);
 
   
-  // printf("\n");
-
-  // printf("hex: %x feet\n\n", 0x2ab30);
-
-  printf("hex: %x feet\n\n", 34000);
 }
