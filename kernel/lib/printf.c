@@ -17,6 +17,10 @@ void int_print(int num) {
     return;
   }
 
+  if (num < 0) {
+    num = num * -1;
+  }
+
   char buffer[buff]; 
   int index = 0;
 
@@ -38,8 +42,13 @@ void hex_print(int num) {
     return;
   }
 
+
   char buffer[buff];
   int index = 0;
+
+  if (num < 0) {
+    num = num * -1;
+  }
 
   while (num > 0) {
     int remainder =num % 16;
@@ -60,6 +69,7 @@ void hex_print(int num) {
   for (int i = index - 1; i >= 0; i--) {
     uart_putc(buffer[i]);
   }
+  
 }
 
 void printf(const char* format, ...) {
@@ -73,8 +83,6 @@ void printf(const char* format, ...) {
       counter++;
       letter = (char*) (format+counter);
       if (*letter == 'd') {
-        // char buff[4]; // use a buffer to manage the ints
-        // uart_putc(((int) va_arg(ap,int)));
         int_print((int)va_arg(ap,int));
       }
       else if (*letter == 'x') {
@@ -89,30 +97,6 @@ void printf(const char* format, ...) {
     counter++;
     letter = (char*) (format+counter);
   }
-
-  // method that updates format 
-  /*
-  char* letter = (char*) format;
-  while (*letter != '\0') {
-    if (*letter == '%') {
-      format = format + 1;
-      letter = (char*) (format);
-      if (*letter == 'd') {
-        uart_putc('s');
-      }
-      else if (*letter == 'x') {
-        
-      }
-    }
-    else {
-      uart_putc(*letter);
-      
-    }
-    format = format + 1;
-    letter = (char*) (format);
-  }
-  */
-
   
   va_end(ap);
 }
