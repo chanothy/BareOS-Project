@@ -29,5 +29,7 @@ void initialize(void) {
   printf("--Kernel size: %d\n",(text_start-data_start));
   printf("Globals start: %x\n",data_start);
   printf("Heap/Stack start: %x\n",mem_start);
-  printf("--Free memory available: %d\n",(mem_start-mem_end));
+  printf("--Free Memory Available: %d\n", (unsigned long)(mem_end - mem_start));
+
+  printf("large number %d\n",(unsigned long) (2e12));
 }
