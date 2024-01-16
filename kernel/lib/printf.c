@@ -36,7 +36,7 @@ void int_print(int num) {
   }
 }
 
-void hex_print(int num) {
+void hex_print(long num) {
   if (num == 0) {
     uart_putc('0');
     return;
@@ -86,7 +86,7 @@ void printf(const char* format, ...) {
       else if (*letter == 'x') {
         uart_putc('0');
         uart_putc('x');
-        hex_print((int)va_arg(ap,int));
+        hex_print((long)va_arg(ap,int));
       }
     }
     else {
