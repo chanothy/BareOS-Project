@@ -1,4 +1,4 @@
-GPORT=5560
+GPORT=5669
 IMG=bareOS.img
 
 ARCH=riscv64-unknown-linux-gnu

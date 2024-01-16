@@ -11,14 +11,16 @@
  *  argument list.
  */
 
-void int_print(int num) {
+void int_print(long num) {
   if (num == 0) {
     uart_putc('0');
     return;
   }
 
+  // check for neg
   if (num < 0) {
-    num = num * -1;
+    uart_putc('-');
+    num = -num;
   }
 
   char buffer[buff]; 
@@ -30,24 +32,24 @@ void int_print(int num) {
     num /= 10;
   }
 
+
   // go back and create the num
   for (int i = index - 1; i >= 0; i--) {
     uart_putc(buffer[i]);
   }
 }
 
-void hex_print(long num) {
+void hex_print(unsigned int num) {
   if (num == 0) {
     uart_putc('0');
     return;
   }
 
-
   char buffer[buff];
   int index = 0;
 
   if (num < 0) {
-    num = num * -1;
+    num = -num;
   }
 
   while (num > 0) {
@@ -81,12 +83,12 @@ void printf(const char* format, ...) {
       counter++;
       letter = (char*) (format+counter);
       if (*letter == 'd') {
-        int_print((int)va_arg(ap,int));
+        int_print((long)va_arg(ap,int));
       }
       else if (*letter == 'x') {
         uart_putc('0');
         uart_putc('x');
-        hex_print((long)va_arg(ap,int));
+        hex_print((unsigned int)va_arg(ap,int));
       }
     }
     else {
