@@ -31,4 +31,6 @@ void initialize(void) {
   printf("Globals start: %x\n",data_start);
   printf("Heap/Stack start: %x\n",mem_start);
   printf("--Free Memory Available: %d\n",(mem_start-mem_end));
+
+  printf("Hexadecimal! %x\n",0x2ab30);
 }
