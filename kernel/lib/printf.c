@@ -55,10 +55,12 @@ void hex_print(int num) {
     if (remainder < 10) {
       // 0 ascii is 0
       buffer[index] = ('0' + remainder);
+      index++;
     }
     else {
       // a acii is 97
       buffer[index] = 'a'+ remainder - 10;
+      index++;
     }
     index++;
     num /= 16;
