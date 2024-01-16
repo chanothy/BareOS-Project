@@ -30,4 +30,4 @@ void initialize(void) {
   printf("Globals start: %x\n",data_start);
   printf("Heap/Stack start: %x\n",mem_start);
   printf("--Free memory available: %d\n",(mem_start-mem_end));
-  }
+}
