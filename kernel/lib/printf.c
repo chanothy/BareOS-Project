@@ -36,7 +36,7 @@ void int_print(int num) {
   }
 }
 
-void hex_print(int num) {
+void hex_print(long num) {
   if (num == 0) {
     uart_putc('0');
     return;
@@ -55,12 +55,10 @@ void hex_print(int num) {
     if (remainder < 10) {
       // 0 ascii is 0
       buffer[index] = ('0' + remainder);
-      index++;
     }
     else {
       // a acii is 97
       buffer[index] = 'a'+ remainder - 10;
-      index++;
     }
     index++;
     num /= 16;
@@ -88,7 +86,7 @@ void printf(const char* format, ...) {
       else if (*letter == 'x') {
         uart_putc('0');
         uart_putc('x');
-        hex_print((int)va_arg(ap,int));
+        hex_print((long)va_arg(ap,int));
       }
     }
     else {
