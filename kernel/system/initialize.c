@@ -25,6 +25,12 @@ void initialize(void) {
   restore_interrupts(mask);
   boot_complete = 1;
   
-  // printf("hello! %d\n",49);
+
+  printf("Kernel start: %x\n",text_start);
+  printf("--Kernel size: %d\n",(text_start-data_start));
+  printf("Globals start: %x\n",data_start);
+  printf("Heap/Stack start: %x\n",mem_start);
+  printf("--Free memory available: %d\n",(mem_start-mem_end));
+  
   printf("Hexadecimal! %x\n",22);
 }
