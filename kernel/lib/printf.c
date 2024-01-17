@@ -32,7 +32,6 @@ void int_print(long num) {
     num /= 10;
   }
 
-
   // go back and create the num
   for (int i = index - 1; i >= 0; i--) {
     uart_putc(buffer[i]);
@@ -68,8 +67,7 @@ void hex_print(unsigned int num) {
 
   for (int i = index - 1; i >= 0; i--) {
     uart_putc(buffer[i]);
-  }
-  
+  }  
 }
 
 void printf(const char* format, ...) {
