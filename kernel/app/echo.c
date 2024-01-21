@@ -9,5 +9,9 @@
  * followed immediately by another \n).
  */
 byte builtin_echo(char* arg) {
+  if (arg[4] == ' ') {
+    printf(&(arg[5]));
+    return 0;
+  }
   return 0;
 }
