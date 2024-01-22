@@ -22,24 +22,23 @@ int wordCheck(char *buffer, const char* cmp) {
   return (cmp[i] == '\0');
 }
 
-char intToChar(int num) {
+int intToChar(int num, char* storage) {
   if (num == 0) {
-    return '0';
+    storage[0] = '0';
+    storage[1] = '\0';
+    return 1;
   }
-  char buffer[MAX];
   int index = 0;
   while (num > 0) {
-    buffer[index] = '0' + (num % 10); // convert me ascii
+    storage[index] = '0' + (num % 10); // convert me ascii
     index++;
     num /= 10;
   }
-  return buffer[0];
+  return index;
 }
 
 byte shell(char* arg) {
-  // uart_putc(intToChar(1));
-  // uart_putc(1);
-  // printf("\n");
+  int returnCode = 0;
   while (1) {
     printf(PROMPT);
     char c;
@@ -56,7 +55,6 @@ byte shell(char* arg) {
       buffer[i] = c;
       i++;
     }
-    int returnCode = 0;
 
     // check hello/echo commands
     if (wordCheck(buffer,"hello")) {
@@ -64,19 +62,37 @@ byte shell(char* arg) {
     }
     else if (wordCheck(buffer,"echo")){
       for (int j = 0; j < i; j++) {
-        if (buffer[j] == '$' && buffer[j+1] == '?') {
-          buffer[j] = intToChar(returnCode);
-          buffer[j+1] = intToChar(returnCode);
-          printf("$");
+        if (buffer[j] == '$' && buffer[j+1] == '?') { // j is used to check for echo, i is the total length of all the words
+          char percentText[MAX];
+          int length = intToChar(returnCode,percentText);
+          if (length == 1) {
+            buffer[j] = percentText[0];
+            int next = j + 2;
+            for (int k = j+1; k < i; k++) {
+                buffer[k] = buffer[next];
+                next++;
+            }
+          }
+          else if (length == 2) {
+
+          }
+          else {
+
+          }
+          printf("{numberLen: %d}\n",length);
         }
       }
+      // ---------------- buffer check
+      printf("buffer: ");
+      printf(buffer);
+      printf("\n");
+      // -----------------------------
       returnCode = builtin_echo(buffer);
     }
     else {
       printf("Unknown command\n");
     }
 
-    // printf("test: %d\n",returnCode);
   }
 
   return 0;
