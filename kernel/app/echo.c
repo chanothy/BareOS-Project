@@ -8,6 +8,8 @@
  * line read from the UART is empty (indicated with a \n
  * followed immediately by another \n).
  */
+
+// gets all text after command and echos it
 int getEchoText(void) {
   char buffer[1024];
   char c;
@@ -34,9 +36,11 @@ byte builtin_echo(char* arg) {
     return 0;
   }
   else {
+    // echo text returns index (amt of text)
+    // while there is text keep incrementing
     while ((loopCount = getEchoText())) {
       letterCount += loopCount;
     }
   }
-  return 0;
+  return letterCount;
 }

@@ -33,6 +33,7 @@ void initialize(void) {
   printf("Heap/Stack start: %x\n",mem_start);
   printf("--Free Memory Available: %d\n", mem_end - mem_start);
   
-  // builtin_hello("hello ");
+  // int i = builtin_hello("hello");
+  // printf("%d",i);
   shell(NULL);
 }

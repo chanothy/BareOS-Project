@@ -8,6 +8,7 @@
  * If no text exists, print and error and return 1 instead.
  */
 byte builtin_hello(char* arg) {
+  // hello checked in shell
   if (arg[6] == '\0') {
     printf("Error - bad argument\n");
     return 1;
