@@ -70,6 +70,13 @@ void hex_print(unsigned int num) {
   }  
 }
 
+void str_print(char* str) {
+  while (*str != '\0') {
+    uart_putc(*str);
+    str++;
+  }
+}
+
 void printf(const char* format, ...) {
   va_list ap;
   va_start(ap, format);
@@ -87,6 +94,9 @@ void printf(const char* format, ...) {
         uart_putc('0');
         uart_putc('x');
         hex_print((unsigned int)va_arg(ap,int));
+      }
+      else if (*letter == 's') {
+        str_print(va_arg(ap,char*));
       }
     }
     else {
