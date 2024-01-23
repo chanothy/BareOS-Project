@@ -65,28 +65,30 @@ byte shell(char* arg) {
         if (buffer[j] == '$' && buffer[j+1] == '?') { // j is used to check for echo, i is the total length of all the words
           char percentText[MAX];
           int length = intToChar(returnCode,percentText);
+          buffer[j] = percentText[0];
+          
+
           if (length == 1) {
             buffer[j] = percentText[0];
-            int next = j + 2;
-            for (int k = j+1; k < i; k++) {
-                buffer[k] = buffer[next];
-                next++;
-            }
           }
           else if (length == 2) {
-
+            buffer[j] = percentText[1];
+            buffer[j+1] = percentText[0];
           }
           else {
-
+            buffer[j] = percentText[2];
+            buffer[j+1] = percentText[1];
+            buffer[j+2] = percentText[0];
           }
-          printf("{numberLen: %d}\n",length);
+          int next = j + 2;
+          for (int k = j+length; k < i; k++) { // k = the position it should start after num is inserted, next is og position
+              buffer[k] = buffer[next];
+              next++;
+          }
+          buffer[next] = '\0';
         }
       }
-      // ---------------- buffer check
-      printf("buffer: ");
-      printf(buffer);
-      printf("\n");
-      // -----------------------------
+
       returnCode = builtin_echo(buffer);
     }
     else {
