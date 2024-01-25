@@ -2,6 +2,10 @@
 	.option arch, +zicsr
 	.equ REGSZ, 8
 
+	.globl _sys_thread_loaded
+_sys_thread_loaded:
+	.word 0
+
 #  `ctxsw`  takes two arguments, a source  thread and destination thread.  It
 #  saves the current  state of the CPU into the  source thread's  table entry
 #  then restores the state of the destination thread onto the CPU and returns
@@ -76,8 +80,10 @@ ctxsw:
 #  is used during initialization to load the FIRST thread and switch from
 #  bootstrap into the OS's steady state.
 .globl ctxload
-ctxload:                     # --
-	ld sp, 0(a0)         #  | Set the stack pointer to a provided memory address (first argument)
-	ld a0, -2*REGSZ(sp)  #  | Load the entry point procedure's address from the stack
-	ld ra, -3*REGSZ(sp)  #  | Load the wrapper's address from the stack
-	ret                  # --
+ctxload:                            # --
+	ld sp, 0(a0)                #  | Set the stack pointer to a provided memory address (first argument)
+	ld a0, -2*REGSZ(sp)         #  | Load the entry point procedure's address from the stack
+	ld ra, -3*REGSZ(sp)         #  | Load the wrapper's address from the stack
+	li t0, 0x1                  #  |
+	sw t0,_sys_thread_loaded,t1 #  | Mark the thread as loaded (for validation)
+	ret                         # --

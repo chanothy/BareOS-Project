@@ -11,6 +11,15 @@
 int32 suspend_thread(uint32 threadid) {
   char mask;
   mask = disable_interrupts();
+
+  thread_t currThr = thread_table[threadid]; // grabs thread from table
+  if (currThr != TH_RUNNING || currThr != TH_READY) {
+    printf("error");
+    return 1;
+  }
+  else {
+    currThr = TH_SUSPEND;
+  }
   
   restore_interrupts(mask);
   return 0;

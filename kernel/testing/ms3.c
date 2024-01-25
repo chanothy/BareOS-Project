@@ -64,7 +64,9 @@ char __test_string(const char*, int, int);
 int _ms_safe_call(void*, ...);
 
 char initialize(char*);
+char shell(char*);
 void ctxload(uint64**);
+char disable_interrupts(void);
 
 void __ms3_reset_threads(void) {
   for (int i=1; i<NTHREADS; i++) thread_table[i].state = TH_FREE;
@@ -313,24 +315,26 @@ void __ms3_shell_tester(void) {
    * Calls join_thread
    */
 
-  __ms_stdin_expects = 0;
-  __ms_syscall_expects = 0;
-  _sys_thread_loaded = 0;
-  _prep_stdin("\0");
-  (int)_ms_safe_call((void (*)(void))initialize);
-  if (!_sys_thread_loaded)
-    __ms3_shell[0] = "FAIL - `ctxload` not called\0";
-
   __ms_stdin_expects = 8;
   _prep_stdin("hello v\n\0");
   __ms_syscall_expects = 1;
-  (int)_ms_safe_call((void (*)(void))initialize);
+  (int)_ms_safe_call((void (*)(void))shell);
   if (_ms_recovery_status != 3)
     __ms3_shell[1] = "FAIL - RESCHED not called when starting application\0";
   __ms3_shell[2] = "N/A - Test could not be automated\0";
   __ms3_shell[3] = "N/A - Test could not be automated\0";
   __ms3_shell[4] = "N/A - Test could not be automated\0";
 
+
+  __ms_stdin_expects = 0;
+  __ms_syscall_expects = 0;
+  _sys_thread_loaded = 0;
+  _prep_stdin("\0");
+  (int)_ms_safe_call((void (*)(void))initialize);
+  disable_interrupts();
+  if (!_sys_thread_loaded)
+    __ms3_shell[0] = "FAIL - `ctxload` not called\0";
+  
   _psudoprint("\nShell Tests:\0");
   for (int i=0; i<5; i++) {
     _psudoprint(__ms3_shell_tests[i]);

@@ -3,7 +3,6 @@
 #include <bareio.h>
 #include <shell.h>
 
-
 /*
  *  This file contains the C code entry point executed by the kernel.
  *  It is called by the bootstrap sequence once the hardware is configured.
@@ -32,6 +31,8 @@ void initialize(void) {
   printf("Globals start: %x\n",data_start);
   printf("Heap/Stack start: %x\n",mem_start);
   printf("--Free Memory Available: %d\n", mem_end - mem_start);
+
+  
   
   shell(NULL);
 }
