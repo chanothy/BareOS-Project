@@ -21,6 +21,7 @@ int32 resched(void) {
       thread_table[newThread].state = TH_RUNNING;
       current_thread = newThread;
       ctxsw(&(thread_table[newThread].stackptr),&(thread_table[oldThread].stackptr));
+      return 0;
     }
     threadCounter++;
   }

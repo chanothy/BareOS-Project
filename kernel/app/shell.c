@@ -1,6 +1,7 @@
 #include <bareio.h>
 #include <barelib.h>
 #include <shell.h>
+#include <thread.h>
 
 #define PROMPT "bareOS$ "  /*  Prompt printed by the shell to the user  */
 #define MAX 1024
@@ -58,7 +59,8 @@ byte shell(char* arg) {
 
     // check hello/echo commands
     if (wordCheck(buffer,"hello")) {
-      returnCode = builtin_hello(buffer);
+        returnCode = join_thread(resume_thread(create_thread(builtin_hello, buffer, i)));
+      // returnCode = builtin_hello(buffer);
     }
     else if (wordCheck(buffer,"echo")){
       for (int j = 0; j < i; j++) {
@@ -88,13 +90,11 @@ byte shell(char* arg) {
           buffer[next] = '\0';
         }
       }
-
-      returnCode = builtin_echo(buffer);
+      returnCode = join_thread(resume_thread(create_thread(builtin_echo, buffer, i)));
     }
     else {
       printf("Unknown command\n");
     }
-
   }
 
   return 0;

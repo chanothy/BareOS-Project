@@ -12,9 +12,10 @@ int32 suspend_thread(uint32 threadid) {
   char mask;
   mask = disable_interrupts();
 
-  if (thread_table[threadid].state != TH_SUSPEND) {
+  if (thread_table[threadid].state == TH_RUNNING || thread_table[threadid].state == TH_READY) {
     thread_table[threadid].state = TH_SUSPEND;
     raise_syscall(RESCHED);
+
   }
   else {
     threadid = -1;
