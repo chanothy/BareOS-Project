@@ -23,9 +23,8 @@ int32 resched(void) {
       ctxsw(&(thread_table[newThread].stackptr),&(thread_table[oldThread].stackptr));
       return 0;
     }
-    threadCounter++;
+    threadCounter = threadCounter + 1;
   }
-
 
   return 0;
 }

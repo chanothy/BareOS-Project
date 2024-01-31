@@ -37,6 +37,4 @@ void initialize(void) {
   current_thread = shell_id;
   thread_table[current_thread].state = TH_RUNNING;
   ctxload(&(thread_table[current_thread].stackptr));
-  
-  shell(NULL);
 }
