@@ -29,8 +29,8 @@ interrupt handle_clk(void) {
   *clint_timer_addr += timer_interval;
   if (boot_complete && is_interrupting()) {
     char mask = disable_interrupts();
-
-    // resched();
+    // CHANGED BY USER
+    // resched(); 
     restore_interrupts(mask);
   }
 }
