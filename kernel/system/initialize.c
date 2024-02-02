@@ -34,7 +34,6 @@ void initialize(void) {
   printf("--Free Memory Available: %d\n", mem_end - mem_start);
 
   int32 shell_id = create_thread(shell,NULL,0);
-  current_thread = shell_id;
-  thread_table[current_thread].state = TH_RUNNING;
+  thread_table[shell_id].state = TH_RUNNING;
   ctxload(&(thread_table[current_thread].stackptr));
 }

@@ -45,8 +45,8 @@ byte shell(char* arg) {
     char c;
     char buffer[MAX];
 
-    //clears 
-    for (int i = 0; i < MAX; ++i) {
+    // clears 
+    for (int i = 0; i < MAX; i++) {
       buffer[i] = '\0';
     }
     int i = 0;

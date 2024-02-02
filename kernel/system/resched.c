@@ -12,7 +12,7 @@ int32 resched(void) {
   static uint32 threadCounter = 0;
   int oldThread = current_thread;
 
-  for (int i = 0; i < NTHREADS; i++) {
+  for (int i = 0; i < NTHREADS; i++) { 
     int newThread = threadCounter % NTHREADS;
     if (thread_table[newThread].state == TH_READY) {
       if (thread_table[oldThread].state == TH_RUNNING) {

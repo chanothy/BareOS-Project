@@ -30,7 +30,7 @@ interrupt handle_clk(void) {
   if (boot_complete && is_interrupting()) {
     char mask = disable_interrupts();
 
-    resched();
+    // resched();
     restore_interrupts(mask);
   }
 }
