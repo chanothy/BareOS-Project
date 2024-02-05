@@ -17,8 +17,14 @@ byte join_thread(uint32 threadid) {
     return thread_table[threadid].retval;
   }
   else {
-    while (thread_table[threadid].state != TH_FREE) {
-      raise_syscall(RESCHED);
+    while (thread_table[threadid].state != TH_DEFUNCT) {
+      if (thread_table[threadid].state == TH_FREE) {
+        return -1;
+      }
+      else {
+        raise_syscall(RESCHED);
+
+      }
     }
   }
   restore_interrupts(mask);

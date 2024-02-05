@@ -1,7 +1,6 @@
 #include <bareio.h>
 #include <barelib.h>
 
-
 /*
  * 'builtin_echo' reads in a line of text from the UART
  * and prints it.  It will continue to do this until the
@@ -38,8 +37,10 @@ byte builtin_echo(char* arg) {
   else {
     // echo text returns index (amt of text)
     // while there is text keep incrementing
-    while ((loopCount = getEchoText())) {
+    loopCount = getEchoText();
+    while (loopCount) {
       letterCount += loopCount;
+      loopCount = getEchoText();
     }
   }
   return letterCount;
