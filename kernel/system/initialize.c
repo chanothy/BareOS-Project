@@ -24,6 +24,13 @@ void initialize(void) {
   char mask;
   mask = disable_interrupts();
   uart_init();
+
+  for (int i = 0; i < NTHREADS; i++) {
+    thread_table[i].state = TH_FREE;
+  }
+
+  thread_queue[ready_list].qnext = thread_queue[ready_list].qprev = ready_list;
+
   restore_interrupts(mask);
   boot_complete = 1;
   
@@ -33,7 +40,11 @@ void initialize(void) {
   printf("Heap/Stack start: %x\n",mem_start);
   printf("--Free Memory Available: %d\n", mem_end - mem_start);
 
-  int32 shell_id = create_thread(shell,NULL,0);
-  thread_table[shell_id].state = TH_RUNNING;
-  ctxload(&(thread_table[current_thread].stackptr));
+  // int32 shell_id = create_thread(shell,NULL,0);
+  // thread_table[shell_id].state = TH_RUNNING;
+  // ctxload(&(thread_table[current_thread].stackptr));
+
+  
+
+
 }
