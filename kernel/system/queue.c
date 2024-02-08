@@ -50,5 +50,19 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
  *  the queue  maintains its structure and the head correctly points to the next thread  *
  *  (if any).                                                                            */
 uint32 thread_dequeue(uint32 queue) {
-  return 0;
+  uint32 head = thread_queue[queue].qnext;
+  // nothing in q
+  if (head == NULL) {
+    return 0;
+  }
+  uint32 next = thread_queue[head].qnext;
+  if (next != NULL) {
+    thread_queue[next].qprev = NULL;
+  }
+  else {
+    thread.queue[queue].qprev = NULL;
+  }
+  thread_queue[head].qnext = NULL;
+  thread_queue[head].qprev = NULL;
+  return head;
 }
