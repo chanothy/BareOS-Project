@@ -3,6 +3,7 @@
 #include <bareio.h>
 #include <shell.h>
 #include <thread.h>
+#include <queue.h>
 
 /*
  *  This file contains the C code entry point executed by the kernel.
@@ -40,9 +41,9 @@ void initialize(void) {
   printf("Heap/Stack start: %x\n",mem_start);
   printf("--Free Memory Available: %d\n", mem_end - mem_start);
 
-  // int32 shell_id = create_thread(shell,NULL,0);
-  // thread_table[shell_id].state = TH_RUNNING;
-  // ctxload(&(thread_table[current_thread].stackptr));
+  int32 shell_id = create_thread(shell,NULL,0);
+  thread_table[shell_id].state = TH_RUNNING;
+  ctxload(&(thread_table[current_thread].stackptr));
 
   
 

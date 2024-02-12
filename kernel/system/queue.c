@@ -60,7 +60,7 @@ uint32 thread_dequeue(uint32 queue) {
     thread_queue[next].qprev = NULL;
   }
   else {
-    thread.queue[queue].qprev = NULL;
+    thread_queue[queue].qprev = NULL;
   }
   thread_queue[head].qnext = NULL;
   thread_queue[head].qprev = NULL;
