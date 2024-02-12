@@ -44,8 +44,4 @@ void initialize(void) {
   int32 shell_id = create_thread(shell,NULL,0);
   thread_table[shell_id].state = TH_RUNNING;
   ctxload(&(thread_table[current_thread].stackptr));
-
-  
-
-
 }

@@ -1,4 +1,5 @@
 #include <queue.h>
+#include <bareio.h>
 
 /*  Queues in bareOS are all contained in the 'thread_queue' array.  Each queue has a "root"
  *  that contains the index of the first and last elements in that respective queue.  These
@@ -15,33 +16,40 @@ uint32 ready_list = NTHREADS + 0;   /*  Index of the read_list root  */
  *  of the queue,  ensuring that the  previous tail of the queue is correctly threaded to  *
  *  maintain the queue.                                                                    */
 void thread_enqueue(uint32 queue, uint32 threadid) {
-  // if next and previous then part of q
-  if (thread_queue[threadid].qnext != NULL || thread_queue[threadid].qprev != NULL)
-    return;
+  // does not consider priority just adds to end
+  uint32 end = thread_queue[queue].qprev;
+  thread_queue[end].qnext = threadid;
+  thread_queue[queue].qprev = threadid;
+  thread_queue[threadid].qprev = end;
+  thread_queue[threadid].qnext = queue;
 
-  thread_t *thread = &thread_table[threadid];
-  uint32 key = thread->priority;
+  // // if next and previous then part of q
+  // if (thread_queue[threadid].qnext != NULL || thread_queue[threadid].qprev != NULL)
+  //   return;
 
-  // keep iterating if key is lower
-  uint32 current_thread = thread_queue[queue].qnext;
-  while (current_thread != NULL && thread_table[current_thread].priority < key) {
-    current_thread = thread_queue[current_thread].qnext;
-  }
+  // thread_t *thread = &thread_table[threadid];
+  // uint32 key = thread->priority;
 
-  if (current_thread != NULL) {
-    uint32 prev = thread_queue[current_thread].qprev;
-    thread_queue[prev].qnext = threadid;
-    thread_queue[threadid].qnext = current_thread;
-    thread_queue[threadid].qprev = prev;
-    thread_queue[current_thread].qprev = threadid;
-  }
-  else {
-    uint32 last = thread_queue[queue].qprev; // circular??
-    thread_queue[last].qnext = threadid;
-    thread_queue[threadid].qprev = last;
-    thread_queue[threadid].qnext = NULL;
-    thread_queue[queue].qprev = threadid;
-  }
+  // // keep iterating if key is lower
+  // uint32 curr_thread = thread_queue[queue].qnext;
+  // while (thread_table[curr_thread].priority < key) {
+  //   curr_thread = thread_queue[curr_thread].qnext;
+  // }
+
+  // if (curr_thread) {
+  //   uint32 prev = thread_queue[curr_thread].qprev;
+  //   thread_queue[prev].qnext = threadid;
+  //   thread_queue[threadid].qnext = curr_thread;
+  //   thread_queue[threadid].qprev = prev;
+  //   thread_queue[curr_thread].qprev = threadid;
+  // }
+  // else {
+  //   uint32 last = thread_queue[queue].qprev;
+  //   thread_queue[last].qnext = threadid;
+  //   thread_queue[threadid].qprev = last;
+  //   thread_queue[threadid].qnext = NULL;
+  //   thread_queue[queue].qprev = threadid;
+  // }
 }
 
 
@@ -50,19 +58,16 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
  *  the queue  maintains its structure and the head correctly points to the next thread  *
  *  (if any).                                                                            */
 uint32 thread_dequeue(uint32 queue) {
+  // thread not in queue, empty queue
+  if (thread_queue[queue].qnext == queue) {
+    return NTHREADS;
+  }
   uint32 head = thread_queue[queue].qnext;
-  // nothing in q
-  if (head == NULL) {
-    return 0;
-  }
   uint32 next = thread_queue[head].qnext;
-  if (next != NULL) {
-    thread_queue[next].qprev = NULL;
-  }
-  else {
-    thread_queue[queue].qprev = NULL;
-  }
+
   thread_queue[head].qnext = NULL;
   thread_queue[head].qprev = NULL;
+  thread_queue[queue].qnext = next;
+  thread_queue[next].qprev = queue;
   return head;
 }
