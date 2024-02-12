@@ -24,7 +24,7 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
 
   // keep iterating if key is lower
   uint32 current_thread = thread_queue[queue].qnext;
-  while (current_thread != NULL && thread_table[current_thread].priority <= key) {
+  while (current_thread != NULL && thread_table[current_thread].priority < key) {
     current_thread = thread_queue[current_thread].qnext;
   }
 

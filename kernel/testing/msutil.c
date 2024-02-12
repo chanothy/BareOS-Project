@@ -113,3 +113,26 @@ char* _copy_dec(char* str, int v) {
     *(str++) = vals[l] + '0';
   return str;
 }
+
+void test_runner(const char* label, uint32 count, void (*runner)(void)) {
+  char num[10];
+  for (int i=0; i<10; i++) num[i] = '\0';
+  _copy_dec(num, (int)count);
+  _psudoprint("Running [");
+  _psudoprint(num);
+  _psudoprint("] ");
+  _psudoprint(label);
+  _psudoprint(" tests...");
+  runner();
+  _psudoprint(" DONE\n");
+}
+
+void test_printer(const char* header, char* out[], const char* in[], uint32 count) {
+  _psudoprint(header);
+  _psudoprint("\n");
+  for (int i=0; i<count; i++) {
+    _psudoprint(in[i]);
+    _psudoprint(out[i]);
+    _psudoprint("\n");
+  }
+}
