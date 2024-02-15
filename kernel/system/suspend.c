@@ -2,6 +2,8 @@
 #include <interrupts.h>
 #include <syscall.h>
 #include <thread.h>
+#include <queue.h>
+
 
 
 /*  Takes a index into the thread table of a thread to suspend.  If the thread is  *
@@ -14,8 +16,8 @@ int32 suspend_thread(uint32 threadid) {
 
   if (thread_table[threadid].state == TH_RUNNING || thread_table[threadid].state == TH_READY) {
     thread_table[threadid].state = TH_SUSPEND;
+    thread_dequeue(ready_list);
     raise_syscall(RESCHED);
-
   }
   else {
     threadid = -1;

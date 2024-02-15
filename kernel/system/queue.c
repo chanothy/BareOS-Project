@@ -17,39 +17,39 @@ uint32 ready_list = NTHREADS + 0;   /*  Index of the read_list root  */
  *  maintain the queue.                                                                    */
 void thread_enqueue(uint32 queue, uint32 threadid) {
   // does not consider priority just adds to end
-  uint32 end = thread_queue[queue].qprev;
-  thread_queue[end].qnext = threadid;
-  thread_queue[queue].qprev = threadid;
-  thread_queue[threadid].qprev = end;
-  thread_queue[threadid].qnext = queue;
+  // uint32 end = thread_queue[queue].qprev;
+  // thread_queue[end].qnext = threadid;
+  // thread_queue[queue].qprev = threadid;
+  // thread_queue[threadid].qprev = end;
+  // thread_queue[threadid].qnext = queue;
 
   // // if next and previous then part of q
   // if (thread_queue[threadid].qnext != NULL || thread_queue[threadid].qprev != NULL)
   //   return;
 
-  // thread_t *thread = &thread_table[threadid];
-  // uint32 key = thread->priority;
+  thread_t *thread = &thread_table[threadid];
+  uint32 key = thread->priority;
 
-  // // keep iterating if key is lower
-  // uint32 curr_thread = thread_queue[queue].qnext;
-  // while (thread_table[curr_thread].priority < key) {
-  //   curr_thread = thread_queue[curr_thread].qnext;
-  // }
+  // keep iterating if key is lower
+  uint32 curr_thread = thread_queue[queue].qnext;
+  while (thread_table[curr_thread].priority <= key && curr_thread != queue) {
+    curr_thread = thread_queue[curr_thread].qnext;
+  }
 
-  // if (curr_thread) {
-  //   uint32 prev = thread_queue[curr_thread].qprev;
-  //   thread_queue[prev].qnext = threadid;
-  //   thread_queue[threadid].qnext = curr_thread;
-  //   thread_queue[threadid].qprev = prev;
-  //   thread_queue[curr_thread].qprev = threadid;
-  // }
-  // else {
-  //   uint32 last = thread_queue[queue].qprev;
-  //   thread_queue[last].qnext = threadid;
-  //   thread_queue[threadid].qprev = last;
-  //   thread_queue[threadid].qnext = NULL;
-  //   thread_queue[queue].qprev = threadid;
-  // }
+  if (curr_thread) {
+    uint32 prev = thread_queue[curr_thread].qprev;
+    thread_queue[prev].qnext = threadid;
+    thread_queue[threadid].qnext = curr_thread;
+    thread_queue[threadid].qprev = prev;
+    thread_queue[curr_thread].qprev = threadid;
+  }
+  else {
+    uint32 last = thread_queue[queue].qprev;
+    thread_queue[last].qnext = threadid;
+    thread_queue[threadid].qprev = last;
+    thread_queue[threadid].qnext = NULL;
+    thread_queue[queue].qprev = threadid;
+  }
 }
 
 
