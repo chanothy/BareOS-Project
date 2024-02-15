@@ -23,9 +23,6 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
   // thread_queue[threadid].qprev = end;
   // thread_queue[threadid].qnext = queue;
 
-  // // if next and previous then part of q
-  // if (thread_queue[threadid].qnext != NULL || thread_queue[threadid].qprev != NULL)
-  //   return;
 
   thread_t *thread = &thread_table[threadid];
   uint32 key = thread->priority;
