@@ -40,6 +40,7 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
     thread_queue[threadid].qnext = curr_thread;
     thread_queue[threadid].qprev = prev;
     thread_queue[curr_thread].qprev = threadid;
+    thread_queue[threadid].key = thread_table[curr_thread].priority;
   }
   else {
     uint32 last = thread_queue[queue].qprev;
@@ -47,6 +48,7 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
     thread_queue[threadid].qprev = last;
     thread_queue[threadid].qnext = NULL;
     thread_queue[queue].qprev = threadid;
+    thread_queue[threadid].key = thread_table[curr_thread].priority;
   }
 }
 

@@ -29,7 +29,9 @@ int32 resched(void) {
       if (thread_table[oldThread].state == TH_RUNNING) {
         thread_table[oldThread].state = TH_READY;
       }
-      thread_enqueue(ready_list, oldThread);
+      if (thread_table[oldThread].state == TH_RUNNING || thread_table[oldThread].state == TH_READY) {
+        thread_enqueue(ready_list, oldThread);
+      }
       current_thread = newThread;
       ctxsw(&(thread_table[newThread].stackptr),&(thread_table[oldThread].stackptr));
     }

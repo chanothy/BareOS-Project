@@ -1,0 +1,37 @@
+
+Running [1] general tests... DONE
+Running [11] sleep tests... DONE
+Running [5] unsleep tests... DONE
+Running [4] resched tests... DONE
+
+----------------------------
+
+General Tests:
+  Program Compiles:                OK
+
+Sleep Tests:
+  Sleep queue is initialized:      OK
+  Sets thread's state:             OK
+  Adds thread to queue:            OK
+  Key set to sleep time [first]:   OK
+  Thread removed from ready queue: OK
+  Longer sleep added in place:     OK
+  Longer sleep key is difference:  OK
+  Shorter sleep added at head:     FAIL - New thread does not point back to sleep_list
+  Queue adjusted for new head:     FAIL - Next thread's key was not adjusted on insert
+  Intermediate sleep inserted:     FAIL - Thread was not inserted in the correct position
+  Intermediate sleep adjusts keys: FAIL - Key of the next thread was not adjusted
+
+Unsleep Tests:
+  Returns -1 when empty:           OK
+  Removed from head:               OK
+  Adjusts next key [head]:         FAIL - Key for new head was not adjusted
+  Remove from middle:              OK
+  Adjusts next key [middle]:       FAIL - Head's key value changed
+
+Resched Tests:
+  Clock decrements head:           OK
+  Zero delay threads removed:      OK
+  Removed multiple zero threads:   OK
+  Removed threads readied:         OK
+
