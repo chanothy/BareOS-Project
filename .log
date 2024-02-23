@@ -19,15 +19,15 @@ Sleep Tests:
   Longer sleep key is difference:  OK
   Shorter sleep added at head:     OK
   Queue adjusted for new head:     OK
-  Intermediate sleep inserted:     FAIL - Thread was not inserted in the correct position
-  Intermediate sleep adjusts keys: FAIL - Key of the next thread was not adjusted
+  Intermediate sleep inserted:     OK
+  Intermediate sleep adjusts keys: OK
 
 Unsleep Tests:
   Returns -1 when empty:           OK
   Removed from head:               OK
-  Adjusts next key [head]:         FAIL - Key for new head was not adjusted
+  Adjusts next key [head]:         OK
   Remove from middle:              OK
-  Adjusts next key [middle]:       FAIL - Head's key value changed
+  Adjusts next key [middle]:       OK
 
 Resched Tests:
   Clock decrements head:           OK

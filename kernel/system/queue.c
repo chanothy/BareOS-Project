@@ -16,24 +16,11 @@ uint32 sleep_list = NTHREADS + 1;
  *  and a threadid of a thread to add to the queue.  The thread will be added to the tail  *
  *  of the queue,  ensuring that the  previous tail of the queue is correctly threaded to  *
  *  maintain the queue.                                                                    */
-void thread_enqueue(uint32 queue, uint32 threadid) {
-  // does not consider priority just adds to end
-  // uint32 end = thread_queue[queue].qprev;
-  // thread_queue[end].qnext = threadid;
-  // thread_queue[queue].qprev = threadid;
-  // thread_queue[threadid].qprev = end;
-  // thread_queue[threadid].qnext = queue;
 
+void thread_enqueue(uint32 queue, uint32 threadid) {
 
   thread_t *thread = &thread_table[threadid];
-
-  uint32 key;
-  if (queue == ready_list) {
-    key = thread->priority;
-  }
-  else if (queue == sleep_list) {
-    key = thread_queue[threadid].key;
-  }
+  uint32 key = thread->priority;
 
   // keep iterating if key is lower
   uint32 curr_thread = thread_queue[queue].qnext;
@@ -47,6 +34,36 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
     thread_queue[threadid].qnext = curr_thread;
     thread_queue[threadid].qprev = prev;
     thread_queue[curr_thread].qprev = threadid;
+    thread_queue[threadid].key = key;
+  }
+  else {
+    uint32 last = thread_queue[queue].qprev;
+    thread_queue[last].qnext = threadid;
+    thread_queue[threadid].qprev = last;
+    thread_queue[threadid].qnext = queue;
+    thread_queue[queue].qprev = threadid;
+    thread_queue[threadid].key = key;
+  }
+}
+
+void thread_enqueue_sleep(uint32 queue, uint32 threadid, uint32 delay) {
+
+  uint32 key = delay;
+
+  // keep iterating if key is lower
+  uint32 curr_thread = thread_queue[queue].qnext;
+  while (thread_queue[curr_thread].key <= key && curr_thread != queue) {
+    key -= thread_queue[curr_thread].key;
+    curr_thread = thread_queue[curr_thread].qnext;
+  }
+
+  if (curr_thread) {
+    uint32 prev = thread_queue[curr_thread].qprev;
+    thread_queue[prev].qnext = threadid;
+    thread_queue[threadid].qnext = curr_thread;
+    thread_queue[threadid].qprev = prev;
+    thread_queue[curr_thread].qprev = threadid;
+    thread_queue[thread_queue[threadid].qnext].key -= key;
     thread_queue[threadid].key = key;
   }
   else {

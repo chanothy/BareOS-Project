@@ -20,6 +20,7 @@ extern uint32 sleep_list;
 
 /*  thread related prototypes  */
 void thread_enqueue(uint32, uint32);
+void thread_enqueue_sleep(uint32, uint32, uint32);
 uint32 thread_dequeue(uint32);
 
 #endif
