@@ -26,11 +26,18 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
 
 
   thread_t *thread = &thread_table[threadid];
-  uint32 key = thread->priority;
+
+  uint32 key;
+  if (queue == ready_list) {
+    key = thread->priority;
+  }
+  else if (queue == sleep_list) {
+    key = thread_queue[threadid].key;
+  }
 
   // keep iterating if key is lower
   uint32 curr_thread = thread_queue[queue].qnext;
-  while (thread_table[curr_thread].priority <= key && curr_thread != queue) {
+  while (thread_queue[curr_thread].key <= key && curr_thread != queue) {
     curr_thread = thread_queue[curr_thread].qnext;
   }
 
@@ -40,15 +47,15 @@ void thread_enqueue(uint32 queue, uint32 threadid) {
     thread_queue[threadid].qnext = curr_thread;
     thread_queue[threadid].qprev = prev;
     thread_queue[curr_thread].qprev = threadid;
-    thread_queue[threadid].key = thread_table[curr_thread].priority;
+    thread_queue[threadid].key = key;
   }
   else {
     uint32 last = thread_queue[queue].qprev;
     thread_queue[last].qnext = threadid;
     thread_queue[threadid].qprev = last;
-    thread_queue[threadid].qnext = NULL;
+    thread_queue[threadid].qnext = queue;
     thread_queue[queue].qprev = threadid;
-    thread_queue[threadid].key = thread_table[curr_thread].priority;
+    thread_queue[threadid].key = key;
   }
 }
 
