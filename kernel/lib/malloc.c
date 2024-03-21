@@ -23,6 +23,18 @@ void heap_init(void) {
  *  contains the remaining free space on the heap.        *
  *  Returns a pointer to the newly created allocation     */
 void* malloc(uint64 size) {
+  alloc_t* prev = NULL;
+  alloc_t* curr = freelist;
+  while (curr != NULL) {
+    if (curr->size >= size && curr->state == M_FREE) {
+      if (prev == NULL) {
+        freelist = curr->next;
+      }
+      else {
+        prev->next = curr->next;
+      }
+    }
+  }
   return 0;
 }
 
