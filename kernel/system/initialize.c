@@ -4,6 +4,7 @@
 #include <shell.h>
 #include <thread.h>
 #include <queue.h>
+#include <malloc.h>
 
 /*
  *  This file contains the C code entry point executed by the kernel.
@@ -25,6 +26,8 @@ void initialize(void) {
   char mask;
   mask = disable_interrupts();
   uart_init();
+  heap_init();
+
 
   for (int i = 0; i < NTHREADS; i++) {
     thread_table[i].state = TH_FREE;

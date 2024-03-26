@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "bareio.h": "c"
+        "bareio.h": "c",
+        "cstdlib": "c"
     }
 }

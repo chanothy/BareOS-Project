@@ -1,37 +1,26 @@
 
-Running [1] general tests... DONE
-Running [11] sleep tests... DONE
-Running [5] unsleep tests... DONE
-Running [4] resched tests... DONE
+Running [2] general tests... DONE
+Running [6] malloc tests... DONE
+Running [5] free tests... DONE
 
 ----------------------------
 
 General Tests:
-  Program Compiles:                OK
+  Program Compiles:              OK
+  Heap initialized during boot:  OK
 
-Sleep Tests:
-  Sleep queue is initialized:      OK
-  Sets thread's state:             OK
-  Adds thread to queue:            OK
-  Key set to sleep time [first]:   OK
-  Thread removed from ready queue: OK
-  Longer sleep added in place:     OK
-  Longer sleep key is difference:  OK
-  Shorter sleep added at head:     OK
-  Queue adjusted for new head:     OK
-  Intermediate sleep inserted:     OK
-  Intermediate sleep adjusts keys: OK
+Malloc Tests:
+  First small allocation correct:        OK
+  Second small allocation correct:       OK
+  Too big returns NULL:                  OK
+  Completely fill heap:                  OK
+  New block between allocations (small): OK
+  New block between allocations (fit):   FAIL - Allocation not placed correctly
 
-Unsleep Tests:
-  Returns -1 when empty:           OK
-  Removed from head:               OK
-  Adjusts next key [head]:         OK
-  Remove from middle:              OK
-  Adjusts next key [middle]:       OK
-
-Resched Tests:
-  Clock decrements head:           OK
-  Zero delay threads removed:      OK
-  Removed multiple zero threads:   OK
-  Removed threads readied:         OK
+Free Tests:
+  Free last block:     OK
+  Free middle block:   OK
+  Coalesce down:       FAIL - Did not coalesce free blocks
+  Coalesce up:         FAIL - Freed block did not coalesce up
+  Free first:          FAIL - Freed block was not coalesced into free list
 
