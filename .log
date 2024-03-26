@@ -15,12 +15,12 @@ Malloc Tests:
   Too big returns NULL:                  OK
   Completely fill heap:                  OK
   New block between allocations (small): OK
-  New block between allocations (fit):   FAIL - Allocation not placed correctly
+  New block between allocations (fit):   OK
 
 Free Tests:
   Free last block:     OK
   Free middle block:   OK
   Coalesce down:       FAIL - Did not coalesce free blocks
   Coalesce up:         FAIL - Freed block did not coalesce up
-  Free first:          FAIL - Freed block was not coalesced into free list
+  Free first:          FAIL - Freed block was not linked to the free list
 

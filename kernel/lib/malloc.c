@@ -32,12 +32,12 @@ void *malloc(uint64 size)
 
   while (curr != NULL)
   {
-    if (curr->state == M_FREE && curr->size >= size + sizeof(alloc_t))
+    if (curr->state == M_FREE && curr->size >= size)
     {
       // cut the block off and update new_free
       if (curr->size - size >= sizeof(alloc_t))
       {
-        alloc_t *new_free = (alloc_t *)((char *)curr + sizeof(alloc_t) + size); // move to next mem
+        alloc_t *new_free = (alloc_t *)((char *)curr  + size + sizeof(alloc_t) ); // move to next mem
         new_free->size = curr->size - size - sizeof(alloc_t);
         new_free->state = M_FREE;
         new_free->next = curr->next;
@@ -47,7 +47,7 @@ void *malloc(uint64 size)
         }
         else
         {
-          prev->next = new_free; 
+          prev->next = new_free;
         }
       }
 
@@ -72,41 +72,30 @@ void *malloc(uint64 size)
  *  freed allocation is adjacent to another free          *
  *  allocation, coallesce the adjacent free blocks into   *
  *  one larger free block.                                */
-void free(void *addr)
-{
+void free(void *addr){
 
   alloc_t *toFree = (alloc_t *)((char *)addr - sizeof(alloc_t));
+  toFree->next = NULL;
 
-  if (toFree->state == M_FREE)
-  {
+  if (toFree->state == M_FREE){
     return;
   }
-  else
-  {
+  else{
     toFree->state = M_FREE;
-    if (freelist == NULL || (char *)toFree < (char *)freelist)
-    {
+    if ((char *)toFree < (char *)freelist){ 
       toFree->next = freelist;
       freelist = toFree;
     }
-
-    if (freelist->next == NULL && (char *)toFree > (char *)freelist)
-    {
-      freelist->next = toFree;
-    }
-    else
-    {
+    else{ // free middle block and last block
       toFree->next = freelist->next;
       freelist->next = toFree;
     }
   }
   alloc_t *curr = freelist;
-  while (curr != NULL)
-  {
-    if ((char *)curr + curr->size == (char *)curr->next)
-    {
-      // curr->size += (curr->next)->size;
-      // curr->next = (curr->next)->next;
+  while (curr != NULL){ 
+    if ((char *)curr + curr->size + sizeof(alloc_t) == (char *)(curr->next) && (curr->next)->state==M_FREE){
+      curr->size += (curr->next)->size + sizeof(alloc_t);
+      curr->next = (curr->next)->next;
       return;
     }
     curr = curr->next;
