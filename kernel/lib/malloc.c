@@ -75,7 +75,6 @@ void *malloc(uint64 size)
 void free(void *addr){
 
   alloc_t *toFree = (alloc_t *)((char *)addr - sizeof(alloc_t));
-  toFree->next = NULL;
 
   if (toFree->state == M_FREE){
     return;
@@ -91,19 +90,24 @@ void free(void *addr){
       freelist->next = toFree;
     }
   }
+
+  alloc_t *freeCo = (alloc_t *)((char *)addr - sizeof(alloc_t));
+
+  if ((char *) freeCo + freeCo->size + sizeof(alloc_t) == (char *) freeCo->next) {
+    freeCo->size += (freeCo->next)->size + sizeof(alloc_t);
+    freeCo->next = (freeCo->next)->next;
+  }
+
   alloc_t *curr = freelist;
-  while (curr != NULL){ 
-    if ((char *)curr + curr->size + sizeof(alloc_t) == (char *)(curr->next) && (curr->next)->state==M_FREE){
-      curr->size += (curr->next)->size + sizeof(alloc_t);
-      curr->next = (curr->next)->next;
+
+  while (curr <= freeCo){ 
+    if (curr->next == freeCo && (char *) curr + curr->size + sizeof(alloc_t) == (char *) freeCo) {
+      curr->size += freeCo->size;
+      curr->next = freeCo->next;
       return;
     }
     curr = curr->next;
   }
-
-  // while(1) {
-
-  // }
 
   return;
 }

@@ -22,5 +22,5 @@ Free Tests:
   Free middle block:   OK
   Coalesce down:       FAIL - Did not coalesce free blocks
   Coalesce up:         FAIL - Freed block did not coalesce up
-  Free first:          FAIL - Freed block was not linked to the free list
+  Free first:          FAIL - Freed block was not coalesced into free list
 
