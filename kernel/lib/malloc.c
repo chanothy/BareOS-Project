@@ -37,10 +37,11 @@ void *malloc(uint64 size)
       // cut the block off and update new_free
       if (curr->size - size >= sizeof(alloc_t))
       {
-        alloc_t *new_free = (alloc_t *)((char *)curr  + size + sizeof(alloc_t) ); // move to next mem
-        new_free->size = curr->size - size - sizeof(alloc_t);
+        alloc_t *new_free = (alloc_t *)((char *)curr + size + sizeof(alloc_t)); // move to next mem
+        new_free->size = curr->size - sizeof(alloc_t) - size;
         new_free->state = M_FREE;
         new_free->next = curr->next;
+        // no allocated blocks before
         if (prev == NULL)
         {
           freelist = new_free;
@@ -60,6 +61,7 @@ void *malloc(uint64 size)
     // update curr
     prev = curr;
     curr = curr->next;
+    // if full then used
     if (curr == NULL && prev != NULL)
     {
       prev->state = M_USED;
@@ -72,41 +74,62 @@ void *malloc(uint64 size)
  *  freed allocation is adjacent to another free          *
  *  allocation, coallesce the adjacent free blocks into   *
  *  one larger free block.                                */
-void free(void *addr){
+void free(void *addr)
+{
 
   alloc_t *toFree = (alloc_t *)((char *)addr - sizeof(alloc_t));
 
-  if (toFree->state == M_FREE){
+  if (toFree->state == M_FREE)
+  {
     return;
   }
-  else{
+  else
+  {
     toFree->state = M_FREE;
-    if ((char *)toFree < (char *)freelist){ 
-      toFree->next = freelist;
-      freelist = toFree;
+    alloc_t *curr = freelist;
+    alloc_t *prev = NULL;
+
+    while (curr < toFree && curr != NULL)
+    {
+      prev = curr;
+      curr = curr->next;
     }
-    else{ // free middle block and last block
-      toFree->next = freelist->next;
-      freelist->next = toFree;
-    }
+
+    prev->next = toFree;
+    toFree->next = curr;
+
+    // if ((char *)toFree < (char *)curr){
+    //   toFree->next = freelist;
+    //   freelist = toFree;
+    // }
+    // else{ // free middle block and last block
+    //   toFree->next = freelist->next;
+    //   freelist->next = toFree;
+    // }
   }
 
-  alloc_t *freeCo = (alloc_t *)((char *)addr - sizeof(alloc_t));
+  // alloc_t *freeCo = (alloc_t *)((char *)addr - sizeof(alloc_t));
 
-  if ((char *) freeCo + freeCo->size + sizeof(alloc_t) == (char *) freeCo->next) {
-    freeCo->size += (freeCo->next)->size + sizeof(alloc_t);
-    freeCo->next = (freeCo->next)->next;
-  }
+  // if (((char *) freeCo + freeCo->size + sizeof(alloc_t))->state = M_FREE) {
+  //   freeCo->size += (freeCo->next)->size + sizeof(alloc_t);
+  //   freeCo->next = (freeCo->next)->next;
+  //   while (1) {
+  //   }
+  // }
 
   alloc_t *curr = freelist;
 
-  while (curr <= freeCo){ 
-    if (curr->next == freeCo && (char *) curr + curr->size + sizeof(alloc_t) == (char *) freeCo) {
-      curr->size += freeCo->size;
-      curr->next = freeCo->next;
-      return;
+  while (curr != NULL && curr->next != NULL)
+  {
+    if ((char *)curr + curr->size + sizeof(alloc_t) == (char *)curr->next)
+    {
+      curr->size += curr->next->size + sizeof(alloc_t);
+      curr->next = curr->next->next;
     }
-    curr = curr->next;
+    else
+    {
+      curr = curr->next;
+    }
   }
 
   return;
