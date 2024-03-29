@@ -33,7 +33,6 @@ int32 resched(void) {
         thread_enqueue(ready_list, oldThread);
       }
       current_thread = newThread;
-      thread_table[newThread].state = TH_RUNNING;
       ctxsw(&(thread_table[newThread].stackptr),&(thread_table[oldThread].stackptr));
     }
   }

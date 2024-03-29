@@ -3,6 +3,4 @@ Kernel start: 0x80000000
 Globals start: 0x80003000
 Heap/Stack start: 0x8000cfc8
 --Free Memory Available: 33541133
-bareOS$ df
-Unknown command
 bareOS$ 

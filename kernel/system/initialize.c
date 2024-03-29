@@ -38,11 +38,11 @@ void initialize(void) {
   restore_interrupts(mask);
   boot_complete = 1;
   
-  // printf("Kernel start: %x\n",text_start);
-  // printf("--Kernel size: %d\n",(data_start - text_start));
-  // printf("Globals start: %x\n",data_start);
-  // printf("Heap/Stack start: %x\n",mem_start);
-  // printf("--Free Memory Available: %d\n", mem_end - mem_start);
+  printf("Kernel start: %x\n",text_start);
+  printf("--Kernel size: %d\n",(data_start - text_start));
+  printf("Globals start: %x\n",data_start);
+  printf("Heap/Stack start: %x\n",mem_start);
+  printf("--Free Memory Available: %d\n", mem_end - mem_start);
 
   int32 shell_id = create_thread(shell,NULL,0);
   thread_table[shell_id].state = TH_RUNNING;
