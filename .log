@@ -1,26 +1,8 @@
-
-Running [2] general tests... DONE
-Running [6] malloc tests... DONE
-Running [5] free tests... DONE
-
-----------------------------
-
-General Tests:
-  Program Compiles:              OK
-  Heap initialized during boot:  OK
-
-Malloc Tests:
-  First small allocation correct:        OK
-  Second small allocation correct:       OK
-  Too big returns NULL:                  OK
-  Completely fill heap:                  OK
-  New block between allocations (small): OK
-  New block between allocations (fit):   OK
-
-Free Tests:
-  Free last block:     OK
-  Free middle block:   OK
-  Coalesce down:       OK
-  Coalesce up:         OK
-  Free first:          OK
-
+Kernel start: 0x80000000
+--Kernel size: 3072
+Globals start: 0x80003000
+Heap/Stack start: 0x8000cfc8
+--Free Memory Available: 33541133
+bareOS$ df
+Unknown command
+bareOS$ 

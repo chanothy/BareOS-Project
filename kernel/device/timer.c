@@ -39,14 +39,13 @@ interrupt handle_clk(void)
 
   // dequeue head if 0
   uint32 head = thread_queue[sleep_list].qnext;
-  while (head != sleep_list) {
-    uint32 next = thread_queue[head].qnext;
+  for (int i = 0; i < NTHREADS; i++) {
     if (thread_queue[head].key == 0) {
-        uint32 threadid = thread_dequeue(sleep_list);
-        thread_enqueue(ready_list, threadid);
-        thread_table[threadid].state = TH_READY;
+      uint32 threadid = thread_dequeue(sleep_list);
+      thread_enqueue(ready_list, threadid);
+      thread_table[threadid].state = TH_READY;
     }
-    head = next;
+    head = thread_queue[head].qnext;
   }
 
 
