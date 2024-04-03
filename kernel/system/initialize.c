@@ -5,6 +5,7 @@
 #include <thread.h>
 #include <queue.h>
 #include <malloc.h>
+#include <tty.h>
 
 /*
  *  This file contains the C code entry point executed by the kernel.
@@ -27,6 +28,7 @@ void initialize(void) {
   mask = disable_interrupts();
   uart_init();
   heap_init();
+  tty_init();
 
 
   for (int i = 0; i < NTHREADS; i++) {

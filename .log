@@ -1,6 +1,42 @@
-Kernel start: 0x80000000
---Kernel size: 3072
-Globals start: 0x80003000
-Heap/Stack start: 0x8000cfc8
---Free Memory Available: 33541133
-bareOS$ 
+
+Running [2] general tests... DONE
+Running [6] getc tests... DONE
+Running [6] putc tests... DONE
+Running [4] handler (receive) tests... DONE
+Running [5] handler (transmit) tests... DONE
+
+----------------------------
+
+General Tests:
+  Program Compiles:            OK
+  TTY initialized during boot: OK
+
+getc Tests:
+  Thread blocks when no char available:   OK
+  Thread does not block when chars exist: OK
+  [Bonus] Semephore awaited in getc:      FAIL - Semaphore was not awaited
+  In buffer count modified:               OK
+  In buffer head was modified:            OK
+  Returns the correct character:          OK
+
+putc Tests:
+  Thread blocks when buffer is full:             OK
+  Thread does not block when buffer is not full: OK
+  [Bonus] Semaphore awaited in putc:             FAIL - Semaphore was not waited
+  Character is added to the buffer:              OK
+  Out buffer count was modified:                 OK
+  UART interrupts enabled on call:               OK
+
+handler (receive) Tests:
+  RX handler returns if buffer is full: OK
+  Character placed into buffer:         OK
+  RX handler modifies in buffer count:  OK
+  [Bonus] Semaphore notifies getc:      FAIL - Semaphore was not signaled on character in
+
+handler (transmit) Tests:
+  TX handler sends character:           OK
+  TX handler modifies out buffer count: OK
+  TX handler modifies out buffer head:  OK
+  Disables uart interrupts on emtpy:    OK
+  [Bonus] Semaphore notifies putc:      FAIL - Semaphore was not signaled on write
+
