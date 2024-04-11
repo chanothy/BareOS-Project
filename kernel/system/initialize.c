@@ -6,6 +6,7 @@
 #include <queue.h>
 #include <malloc.h>
 #include <tty.h>
+#include <fs.h>
 
 /*
  *  This file contains the C code entry point executed by the kernel.
@@ -29,6 +30,18 @@ void initialize(void) {
   uart_init();
   heap_init();
   tty_init();
+
+  bs_mk_ramdisk(MDEV_NUM_BLOCKS, MDEV_BLOCK_SIZE);
+
+  fs_mkfs();
+
+
+
+  fs_create("other_thing");
+
+  fs_mount();
+
+
 
 
   for (int i = 0; i < NTHREADS; i++) {

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "bareio.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "malloc.h": "c"
     }
 }

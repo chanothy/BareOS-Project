@@ -86,6 +86,7 @@ void uart_handler(void)
     readchar = uart[UART0_RW_REG]; /*    Read UART and save the char in 'readchar'.  -- This text replaced in Milestone 8 --  */
     if (tty_in_count < TTY_BUFFLEN)
     {
+      // tty_putc(readchar);
       tty_in[(tty_in_head + tty_in_count) % TTY_BUFFLEN] = readchar;
       tty_in_count++;
     }

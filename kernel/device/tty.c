@@ -15,6 +15,8 @@ uint32 tty_out_count = 0;  /* Number of characters in `tty_out`                 
 /*  Initialize the `tty_in_sem` and `tty_out_sem` semaphores  *
  *  for later TTY calls.                                      */
 void tty_init(void) {
+  // sem_create(&tty_in_sem);  
+  // sem_create(&tty_out_sem);  
   return;
 }
 

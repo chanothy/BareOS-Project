@@ -24,3 +24,5 @@ int32 raise_syscall(uint32);          /*  Ask the operating system to run a low 
 void uart_init(void);
 
 extern uint32 boot_complete;
+
+
