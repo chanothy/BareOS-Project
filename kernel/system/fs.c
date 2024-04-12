@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <interrupts.h>
 #include <fs.h>
+#include <bareio.h>
 
 fsystem_t* fsd = NULL;
 filetable_t oft[NUM_FD];
@@ -44,16 +45,20 @@ void fs_mkfs(void) {
     fsd.freemask[i] = 0;                                  /*  Initially clear the free bitmask           */
                                                           /*                                             */
   for (i=0; i<DIR_SIZE; i++) {                            /*  Set up the directory entries as            */
-    fsd.root_dir.entry[i].inode_block = EMPTY;            /*  empty.                                     */
+    fsd.root_dir.entry[i].inode_block = EMPTY;             /*  empty.                                     */
     memset(fsd.root_dir.entry[i].name, 0, FILENAME_LEN);  /*                                             */
   }                                                       /*                                             */
+  // printf("initialization: %d\n",fsd.root_dir.entry[0].inode_block);
+
+  
   
   fsd.freemask[SB_BIT / 8] |= 0x1 << (SB_BIT % 8);        /*                                             */
   fsd.freemask[BM_BIT / 8] |= 0x1 << (BM_BIT % 8);        /*  Set  the  super  block  and free  bitmask  */
+  
   bs_write(SB_BIT, 0, &fsd, sizeof(fsystem_t));           /*  block  as used  and write  the 'fsd'  and  */
   bs_write(BM_BIT, 0, fsd.freemask, fsd.freemasksz);      /*  bitmask to the 0 and 1 block respectively  */
   free(fsd.freemask);                                     /*                                             */
-
+  
   restore_interrupts(mask);
   return;
 }
@@ -83,6 +88,7 @@ uint32 fs_mount(void) {
     oft[i].head = 0;                                                      /*  table                       */
     oft[i].direntry = 0;                                                  /*                              */
   }                                                                       /*                              */
+  
 
   restore_interrupts(mask);
   return 0;

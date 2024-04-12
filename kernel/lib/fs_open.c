@@ -1,5 +1,6 @@
 #include <barelib.h>
 #include <fs.h>
+#include <bareio.h>
 
 extern fsystem_t *fsd;
 extern filetable_t oft[NUM_FD];
@@ -9,54 +10,50 @@ extern filetable_t oft[NUM_FD];
  *  slot in the open file table and initialize it to the corresponding  *
  *  inode in the root directory.                                        *
  *  'head' is initialized to the start of the file.                     */
-int32 fs_open(char *filename) {
-  int inode_index = -1;
-  for (int i = 0; i < DIR_SIZE; i++) {
-    int j = 0;
-    while (fsd->root_dir.entry[i].name[j] != '\0' || filename[j] != '\0') {
-      if (fsd->root_dir.entry[i].name[j] != filename[j]) {
-        break;
+int32 fs_open(char* filename) {
+  directory_t dir = fsd->root_dir;
+  for (int i = 0; i < NUM_FD; i++) {
+    dirent_t curEntry = dir.entry[i];
+    if (oft[i].state == FSTATE_OPEN) {
+      int j = 0;
+      while (curEntry.name[j] != '\0' && filename[j] != '\0' && curEntry.name[j] == filename[j]) {
+          j++;
       }
-      j++;
-    }
-    if (fsd->root_dir.entry[i].name[j] == '\0' && filename[j] == '\0') {
-      inode_index = fsd->root_dir.entry[i].inode_block;
-      break;
+      if (curEntry.name[j] == filename[j]) {
+          return -1;
+      }
     }
   }
 
-  if (inode_index == -1) {
-    return -1;
-  }
 
-  for (int i = 0; i < NUM_FD; i++) {  
-    if (oft[i].state != FSTATE_CLOSED && oft[i].direntry == inode_index) {
-      return -1; 
-    }
-  }
-
-  
   int slot = -1;
   for (int i = 0; i < NUM_FD; i++) {
     if (oft[i].state == FSTATE_CLOSED) {
       slot = i;
-      // oft[i].state = FSTATE_OPEN;   
-      break; 
+      break;
+    }
+  }
+  
+  if (slot == -1) {
+    return -1;
+  }
+
+  for (int i = 0; i < dir.numentries; i++) {
+    int j = 0;
+    while (dir.entry[i].name[j] != '\0' && filename[j] != '\0' && dir.entry[i].name[j] == filename[j]) {
+        j++;
+    }
+    if (dir.entry[i].name[j] == filename[j]) {
+      uint32 inodeBlock = dir.entry[i].inode_block;
+      bs_read(inodeBlock, 0, &(oft[slot].inode), sizeof(inode_t));
+      oft[slot].state = FSTATE_OPEN;
+      oft[slot].head = SEEK_START;
+      oft[slot].direntry = i;
+      return slot;
     }
   }
 
-  if (slot == -1) {
-      return -1;
-  }
-  // inode_t file_inode;
-  // bs_read(inode_index, 0, &file_inode, sizeof(inode_t));
-  inode_t inode;
-  bs_read(inode_index, 0, &inode, sizeof(inode_t));
-  oft[slot].state = FSTATE_OPEN;
-  oft[slot].direntry = inode_index;
-  oft[slot].head = 0;
-  oft[slot].inode = inode;
-  oft[slot].inode.id = inode_index;
   
-  return slot;
+  return -1;
 }
+

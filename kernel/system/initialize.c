@@ -32,17 +32,8 @@ void initialize(void) {
   tty_init();
 
   bs_mk_ramdisk(MDEV_NUM_BLOCKS, MDEV_BLOCK_SIZE);
-
   fs_mkfs();
-
-
-
-  fs_create("other_thing");
-
   fs_mount();
-
-
-
 
   for (int i = 0; i < NTHREADS; i++) {
     thread_table[i].state = TH_FREE;

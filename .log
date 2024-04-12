@@ -16,15 +16,15 @@ Create Tests:
   Returns error if directory is full:            OK
   Returns error if filename exists in directory: OK
   Returns error if no blocks remain for file:    OK
-  Sets filename to a directory entry:            FAIL - Second filename does not match requested file name
-  Sets inode index to a directory entry:         FAIL - Second inode block number does not match expected block number
-  Marks inode as used in bitmask:                FAIL - Freemask was not updated to reflect second requested inode
-  Saves changes back to the blockstore:          FAIL - inode block does not contain the correct ID value
+  Sets filename to a directory entry:            OK
+  Sets inode index to a directory entry:         OK
+  Marks inode as used in bitmask:                OK
+  Saves changes back to the blockstore:          OK
 
 Open Tests:
   Returns error if file is already open:    OK
   Returns error if the file does not exist: OK
-  Adds file to the open file table:         FAIL - oft entry does not point to correct directory entry
+  Adds file to the open file table:         OK
   Reads file's control block into inode:    OK
   Returns the index of the oft entry:       OK
 

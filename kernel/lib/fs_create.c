@@ -11,11 +11,43 @@ void* memcpy(void*, const void*, int);
  *  new file  entry in the  root directory, a llocate an  *
  *  unused  block in the block  device and  assign it to  *
  *  the new file.                                         */
-int32 fs_create(char* filename) {
-  int entry = -1;
+int32 fs_create(char* filename) {  
+  if (fsd->root_dir.numentries >= INODE_BLOCKS) {
+    return -1;
+  } 
+
+  // find if filename there WRONG SOMEHOW
+  for (uint32 i = 0; i < DIR_SIZE; i++) {
+    int j = 0;
+    while (fsd->root_dir.entry[i].name[j] != '\0' && filename[j] != '\0') {
+      if (fsd->root_dir.entry[i].name[j] != filename[j]) {
+          break; 
+      }
+      j++;
+    }
+
+    if (fsd->root_dir.entry[i].name[j] == '\0' && filename[j] == '\0') {
+      return -1; 
+    }
+  }
+
+
+  uint32 freeBlock = EMPTY;
+  for (uint32 i = 0; i < fsd->device.nblocks; i++) {
+    if (fs_getmaskbit(i) == 0) {
+      freeBlock = i;
+      break;
+    }
+  }
+
+  if (freeBlock == EMPTY) {
+    return -1;
+  }
+
+  uint32 entry = -1;
   // go thru all the stuff to find unused entry
   for (uint32 i = 0; i < DIR_SIZE; i++) {
-    if (fsd->root_dir.entry[i].name[0] == '\0' && fsd->root_dir.entry[i].inode_block == EMPTY) {
+    if (fsd->root_dir.entry[i].inode_block == 16777215) {
       entry = i;
       break;
     }
@@ -25,55 +57,38 @@ int32 fs_create(char* filename) {
     return -1;
   }
 
-  // find if filename there
-  for (int i = 0; i < DIR_SIZE; i++) {
-    int j = 0;
-    while (fsd->root_dir.entry[i].name[j] != '\0' || filename[j] != '\0') {
-        if (fsd->root_dir.entry[i].name[j] != filename[j]) {
-            break; 
-        }
-        j++;
-    }
+  fsd->root_dir.numentries++;
 
-    if (fsd->root_dir.entry[i].name[j] == '\0' && filename[j] == '\0') {
-        return -1; 
-    }
+  // set file name to 
+  fsd->root_dir.entry[entry].inode_block = freeBlock;
+  int len = 0;
+  while (filename[len] != '\0') {
+    len++;
   }
 
-  // // gets a free block index for inode
-  // int freeBlock = -1;
-  // for (int i = 0; i < fsd->device.nblocks; i++) {
-  //   if (fs_getmaskbit(i) == 0) {
-  //     freeBlock = i;
-  //     break;
-  //   }
-  // }
+  for (uint32 i = 0; i < len; i++) {
+    fsd->root_dir.entry[entry].name[i] = filename[i];
+  }
+  fsd->root_dir.entry[entry].name[len] = '\0';
 
-  // // set file name to 
-  // fsd->root_dir.entry[entry].inode_block = freeBlock;
-  // for (int32 i = 0; i < FILENAME_LEN; i++) {
-  //   fsd->root_dir.entry[entry].name[i] = filename[i];
-  //   if (filename[i] == '\0') {
-  //       break;
-  //   }
-  // }
-  // // memcpy(fsd->root_dir.entry[entry].name, filename, FILENAME_LEN);
 
-  // fsd->root_dir.numentries++;
 
-  // // create inode pointing to the freeblock
-  // inode_t inode;
-  // inode.id = freeBlock;
-  // inode.size = 0;
-  // for (int i = 0; i < INODE_BLOCKS; i++) {
-  //   inode.blocks[i] = EMPTY;
-  // }
+  // make inode to put in mem
+  inode_t myInode;
+  myInode.id = freeBlock;
+  myInode.size = 0;
+  for (int i = 0; i < INODE_BLOCKS; i++) {
+    myInode.blocks[i] = EMPTY;
+  }
 
-  // bs_write(freeBlock, 0, &inode, sizeof(inode_t));
+  bs_write(freeBlock, 0, &myInode, sizeof(inode_t));
 
-  // fs_setmaskbit(freeBlock);
+  fs_setmaskbit(freeBlock);
 
-  // bs_write(1, 0, fsd->freemask, fsd->freemasksz);
+  bs_write(BM_BIT, 0, fsd->freemask, fsd->freemasksz);
   
   return 0;
+  
 }
+
+
