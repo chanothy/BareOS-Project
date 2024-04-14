@@ -13,13 +13,12 @@ extern filetable_t oft[NUM_FD];
 int32 fs_open(char* filename) {
   directory_t dir = fsd->root_dir;
   for (int i = 0; i < NUM_FD; i++) {
-    dirent_t curEntry = dir.entry[i];
     if (oft[i].state == FSTATE_OPEN) {
       int j = 0;
-      while (curEntry.name[j] != '\0' && filename[j] != '\0' && curEntry.name[j] == filename[j]) {
+      while (dir.entry[i].name[j] != '\0' && filename[j] != '\0' && dir.entry[i].name[j] == filename[j]) {
           j++;
       }
-      if (curEntry.name[j] == filename[j]) {
+      if (dir.entry[i].name[j] == filename[j]) {
           return -1;
       }
     }
@@ -44,10 +43,9 @@ int32 fs_open(char* filename) {
         j++;
     }
     if (dir.entry[i].name[j] == filename[j]) {
-      uint32 inodeBlock = dir.entry[i].inode_block;
-      bs_read(inodeBlock, 0, &(oft[slot].inode), sizeof(inode_t));
+      bs_read(dir.entry[i].inode_block, 0, &(oft[slot].inode), sizeof(inode_t));
       oft[slot].state = FSTATE_OPEN;
-      oft[slot].head = SEEK_START;
+      oft[slot].head = 0;
       oft[slot].direntry = i;
       return slot;
     }
