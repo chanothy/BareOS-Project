@@ -16,10 +16,10 @@ int32 fs_open(char* filename) {
     if (oft[i].state == FSTATE_OPEN) {
       int j = 0;
       while (dir.entry[i].name[j] != '\0' && filename[j] != '\0' && dir.entry[i].name[j] == filename[j]) {
-          j++;
+        j++;
       }
       if (dir.entry[i].name[j] == filename[j]) {
-          return -1;
+        return -1;
       }
     }
   }
@@ -40,7 +40,7 @@ int32 fs_open(char* filename) {
   for (int i = 0; i < dir.numentries; i++) {
     int j = 0;
     while (dir.entry[i].name[j] != '\0' && filename[j] != '\0' && dir.entry[i].name[j] == filename[j]) {
-        j++;
+      j++;
     }
     if (dir.entry[i].name[j] == filename[j]) {
       bs_read(dir.entry[i].inode_block, 0, &(oft[slot].inode), sizeof(inode_t));
