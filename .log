@@ -10,16 +10,16 @@ General Tests:
 
 Read Tests:
   Read file from start <partial-block>:       FAIL - Buffer was written to past length value
-  Read file from start <complete-block>:      OK
-  Read file from start <multi-block>:         OK
-  Read file from start <multi-block-partial>: OK
-  Read block offset <partial>:                OK
-  Read block offset <rest-of-block>:          OK
-  Read block offset <multi-block>:            OK
-  Read block offset <multi-block-partial>:    OK
-  Read later block <partial>:                 OK
-  Read later block <full block>:              OK
-  Read later block <multi-block>:             OK
+  Read file from start <complete-block>:      FAIL - Read does not match written value
+  Read file from start <multi-block>:         FAIL - Read does not match written value
+  Read file from start <multi-block-partial>: FAIL - Buffer was written to past length value
+  Read block offset <partial>:                FAIL - Buffer was written to past length value
+  Read block offset <rest-of-block>:          FAIL - Read does not match written value
+  Read block offset <multi-block>:            FAIL - Read does not match written value
+  Read block offset <multi-block-partial>:    FAIL - Buffer was written to past length value
+  Read later block <partial>:                 FAIL - Buffer was written to past length value
+  Read later block <full block>:              FAIL - Read does not match written value
+  Read later block <multi-block>:             FAIL - Buffer was written to past length value
   Read more than filesize:                    FAIL - Read past the end of the file
 
 Write Tests:

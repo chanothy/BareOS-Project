@@ -15,34 +15,34 @@
 
 uint32 fs_read(uint32 fd, char *buff, uint32 len)
 {
-  filetable_t *file_entry = &oft[fd];
-  uint32 head = file_entry->head;
-  inode_t *inode = &file_entry->inode;
-  uint32 total_bytes_read = 0;
+  filetable_t *file = &oft[fd];
+  uint32 head = file->head;
+  inode_t *inode = &file->inode;
+  uint32 bytesRead = 0;
 
-  uint32 block_index = head / MDEV_BLOCK_SIZE;
-  uint32 block_offset = head % MDEV_BLOCK_SIZE;
+  uint32 blockIndex = head / MDEV_BLOCK_SIZE;
+  uint32 offset = head % MDEV_BLOCK_SIZE;
 
-  while (len > 0 && head < inode->size)
+  while (len > 0)
   {
     char block[MDEV_BLOCK_SIZE];
-    bs_read(inode->blocks[block_index], block_offset, block, MDEV_BLOCK_SIZE - block_offset);
+    bs_read(inode->blocks[blockIndex], offset, block, MDEV_BLOCK_SIZE - offset);
 
-    uint32 bytes_to_read = (len < MDEV_BLOCK_SIZE - block_offset) ? len : (MDEV_BLOCK_SIZE - block_offset);
+    uint32 bytes = (len < MDEV_BLOCK_SIZE - offset) ? len : (MDEV_BLOCK_SIZE - offset);
 
-    for (uint32 i = 0; i < bytes_to_read; i++)
+    for (uint32 i = 0; i < bytes; i++)
     {
       *buff++ = block[i];
-      total_bytes_read++;
+      bytesRead++;
     }
 
-    len -= bytes_to_read;
-    head += bytes_to_read;
-    block_offset = 0;
-    block_index++;
+    len -= bytes;
+    head += bytes;
+    offset = 0;
+    blockIndex++;
   }
 
-  file_entry->head = head;
+  file->head = head;
 
-  return total_bytes_read;
+  return bytesRead;
 }
