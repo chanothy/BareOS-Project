@@ -1,32 +1,41 @@
 
 Running [1] general tests... DONE
-Running [12] read tests... DONE
-Running [6] write tests... DONE
+Running [3] suspend tests... DONE
+Running [3] resume tests... DONE
+Running [3] join tests... DONE
+Running [5] resched tests... DONE
+Running [4] shell tests... DONE
 
 ----------------------------
 
 General Tests:
-  Program Compiles:   OK
+  Program Compiles:                   OK
 
-Read Tests:
-  Read file from start <partial-block>:       FAIL - Buffer was written to past length value
-  Read file from start <complete-block>:      FAIL - Read does not match written value
-  Read file from start <multi-block>:         FAIL - Read does not match written value
-  Read file from start <multi-block-partial>: FAIL - Buffer was written to past length value
-  Read block offset <partial>:                FAIL - Buffer was written to past length value
-  Read block offset <rest-of-block>:          FAIL - Read does not match written value
-  Read block offset <multi-block>:            FAIL - Read does not match written value
-  Read block offset <multi-block-partial>:    FAIL - Buffer was written to past length value
-  Read later block <partial>:                 FAIL - Buffer was written to past length value
-  Read later block <full block>:              FAIL - Read does not match written value
-  Read later block <multi-block>:             FAIL - Buffer was written to past length value
-  Read more than filesize:                    FAIL - Read past the end of the file
+Suspend Tests:
+  Indicated thread was suspended:     OK
+  Invalid threads not suspended:      OK
+  Raises RESCHED signal:              OK
 
-Write Tests:
-  Write start of file <partial>:        FAIL - Block number not written to inode
-  Write start of file <complete-block>: FAIL - Block index not written to inode
-  Write start of file <multi-block>:    FAIL - Block index not written to inode
-  Overwrite existing file:              OK
-  Append to end of file <partial>:      OK
-  Append to end of file <multi-block>:  FAIL - Data inside second block does not match file write
+Resume Tests:
+  Indicated thread was readied:       OK
+  Invalid threads are ignored:        OK
+  Raises RESCHED signal:              OK
+
+Join Tests:
+  Frees awaited thread:               OK
+  Returns the thread's return value:  OK
+  Blocks until thread is defunct:     OK
+
+Resched Tests:
+  Alternates between two threads:     OK
+  Cycles between three threads:       OK
+  Sets old thread as ready:           OK
+  Sets the current thread:            OK
+  Sets the new thread to running:     OK
+
+Shell Tests:
+  Creates applications with threads:  OK
+  Calls `create_thread`:              OK
+  Calls `resume_thread`:              OK
+  Calls `join_thread`:                OK
 
